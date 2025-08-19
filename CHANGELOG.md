@@ -36,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Efficient clipboard monitoring with minimal system impact
 - Proper memory management and performance optimization
 - Error handling with user-friendly feedback
-- Universal application compatibility (works in Sublime Text, Zed, Firefoo, etc.)
+- Universal application compatibility (works almost everywhere on the macOS platform)
 
 ### Architecture Changes
 - Replaced double-click detection with clipboard monitoring
