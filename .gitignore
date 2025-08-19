@@ -1,0 +1,4 @@
+plans/
+.build/
+build/
+**/*DS_Store*
