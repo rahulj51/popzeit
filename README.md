@@ -2,6 +2,8 @@
 
 A lightweight macOS menu bar app that instantly converts Unix timestamps to human-readable dates when copied to the clipboard.
 
+![PopZeit Logo](PopZeit.png)
+
 ## Features
 
 - **Clipboard Monitoring**: Copy any Unix timestamp to clipboard to see instant conversion
@@ -37,6 +39,8 @@ A lightweight macOS menu bar app that instantly converts Unix timestamps to huma
 2. Copy the timestamp (Cmd+C)
 3. A popover appears automatically showing the converted time
 4. Click the copy button to copy any format to clipboard
+
+![PopZeit screenshot](screenshot.jpg)
 
 ### Menu Bar Options
 - **Enable/Disable Clipboard Monitoring**: Toggle clipboard monitoring on/off
