@@ -21,7 +21,7 @@ A lightweight macOS menu bar app that instantly converts Unix timestamps to huma
 - No special permissions required
 
 ### Download
-1. Download the latest release from the [Releases](https://github.com/yourusername/popzeit/releases) page
+1. Download the latest release from the [Releases](https://github.com/rahulj5s/popzeit/releases) page
 2. Open the `.dmg` file
 3. Drag PopZeit to your Applications folder
 4. Launch PopZeit from Applications
@@ -148,7 +148,7 @@ PopZeit is designed with privacy in mind:
 
 ## Support
 
-For issues, questions, or suggestions, please [open an issue](https://github.com/yourusername/popzeit/issues) on GitHub.
+For issues, questions, or suggestions, please [open an issue](https://github.com/rahulj51/popzeit/issues) on GitHub.
 
 ## Acknowledgments
 
