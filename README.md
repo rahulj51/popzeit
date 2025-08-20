@@ -1,6 +1,6 @@
-# PopZeit - Unix Timestamp Converter for macOS
+# PopZeit - A macOS menu bar app to convert unix timestamps and UUIDv1 to human readable timestamps. 
 
-A lightweight macOS menu bar app that instantly converts Unix timestamps to human-readable dates when copied to the clipboard.
+A lightweight macOS menu bar app that instantly converts Unix timestamps, UUIDv1s and ULIDs to human-readable dates when copied to the clipboard.
 
 ![PopZeit Logo](PopZeit.png)
 
