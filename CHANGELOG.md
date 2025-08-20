@@ -5,6 +5,33 @@ All notable changes to PopZeit will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2024-08-20
+
+### Changed
+- **Distribution Strategy**: Switched from DMG to Homebrew Cask as primary distribution method
+- **Installation**: Multiple installation options now available (Homebrew, install script, direct download, build from source)
+- **Build Process**: Updated build script to create ZIP archives instead of DMG files
+- **Documentation**: Enhanced README with comprehensive installation instructions
+
+### Added
+- Homebrew Cask formula for easy installation via `brew install --cask popzeit`
+- One-line install script with automatic quarantine removal
+- Automated GitHub Actions workflow for releases
+- SHA256 checksum calculation for package verification
+- Multiple installation methods to suit different user preferences
+
+### Technical
+- ZIP archive distribution eliminates code signing requirements
+- Automatic quarantine attribute removal in install script
+- GitHub Actions automatically builds and uploads release assets
+- Homebrew Cask handles all macOS security requirements seamlessly
+
+### Distribution
+- **Primary**: Homebrew Cask (`brew install --cask popzeit`)
+- **Alternative**: Install script (`curl -fsSL https://raw.githubusercontent.com/rahulj51/popzeit/main/install.sh | bash`)
+- **Manual**: Direct ZIP download from GitHub releases
+- **Developer**: Build from source with `./build.sh`
+
 ## [1.0.0] - 2024-08-19
 
 ### Added
@@ -60,8 +87,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Open source for transparency
 
 ### Distribution
-- Professional DMG installer (156KB)
-- Unsigned binary with clear installation instructions
+- Homebrew Cask support for easy installation
+- ZIP archive distribution (no code signing required)
+- One-line install script with quarantine removal
+- Multiple installation methods (Homebrew, direct download, build from source)
+- Automated GitHub Actions release workflow
 - Build scripts for easy compilation
 - Comprehensive distribution documentation
 

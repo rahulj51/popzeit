@@ -1,0 +1,74 @@
+name: Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Swift
+      uses: swift-actions/setup-swift@v2
+      with:
+        swift-version: "5.9"
+    
+    - name: Build PopZeit
+      run: |
+        ./build.sh
+        
+    - name: Get version from tag
+      id: get_version
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/v}
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "Version: ${VERSION}"
+        
+    - name: Verify ZIP file
+      run: |
+        ls -la build/
+        if [ ! -f "build/PopZeit-${{ steps.get_version.outputs.version }}.zip" ]; then
+          echo "Expected ZIP file not found!"
+          exit 1
+        fi
+        
+    - name: Calculate SHA256
+      id: calculate_sha
+      run: |
+        SHA256=$(shasum -a 256 "build/PopZeit-${{ steps.get_version.outputs.version }}.zip" | cut -d' ' -f1)
+        echo "sha256=${SHA256}" >> $GITHUB_OUTPUT
+        echo "SHA256: ${SHA256}"
+        
+    - name: Upload ZIP to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./build/PopZeit-${{ steps.get_version.outputs.version }}.zip
+        asset_name: PopZeit-${{ steps.get_version.outputs.version }}.zip
+        asset_content_type: application/zip
+        
+    - name: Update release description with SHA256
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const release = await github.rest.repos.getRelease({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            release_id: ${{ github.event.release.id }}
+          });
+          
+          const currentBody = release.data.body || '';
+          const sha256Info = `\n\n## SHA256 Checksums\n\n\`PopZeit-${{ steps.get_version.outputs.version }}.zip\`: \`${{ steps.calculate_sha.outputs.sha256 }}\`\n\n## Homebrew Cask\n\nTo update the Homebrew Cask formula, use:\n- Version: \`${{ steps.get_version.outputs.version }}\`\n- SHA256: \`${{ steps.calculate_sha.outputs.sha256 }}\``;
+          
+          await github.rest.repos.updateRelease({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            release_id: ${{ github.event.release.id }},
+            body: currentBody + sha256Info
+          });
