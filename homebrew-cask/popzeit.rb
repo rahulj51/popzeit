@@ -3,7 +3,7 @@
 
 cask "popzeit" do
   version "1.0.1"
-  sha256 "2d8808a64d719b4551173c78d51b503ee1a72e526ff4143b00ae3c667ac5307c"
+  sha256 "346edf003d01cbcd4d89e72c6e6ea2246f904659028235c61c6d08b612c24420"
 
   url "https://github.com/rahulj51/popzeit/releases/download/v#{version}/PopZeit-#{version}.zip"
   name "PopZeit"

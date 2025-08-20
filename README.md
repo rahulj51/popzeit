@@ -30,7 +30,8 @@ A lightweight macOS menu bar app that instantly converts Unix timestamps to huma
 ### Option 1: Homebrew (Recommended)
 ```bash
 # Install via Homebrew Cask
-brew install --cask popzeit
+brew tap rahulj51/popzeit
+brew install --cask popzeit --no-quarantine
 
 # Update when new versions are available
 brew upgrade --cask popzeit
