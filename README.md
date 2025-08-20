@@ -36,6 +36,9 @@ brew install --cask popzeit --no-quarantine
 # Update when new versions are available
 brew upgrade --cask popzeit
 
+# if upgrade doens't work, reinstall with force
+brew reinstall --cask popzeit --no-quarantine --force
+
 # Uninstall if needed
 brew uninstall --cask popzeit
 ```
