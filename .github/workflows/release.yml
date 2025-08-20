@@ -11,14 +11,89 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Set up Swift
-      uses: swift-actions/setup-swift@v2
-      with:
-        swift-version: "5.9"
-    
-    - name: Build PopZeit
+    - name: Check Swift version
       run: |
-        ./build.sh
+        swift --version
+        xcode-select -p
+    
+    - name: Cache Swift packages
+      uses: actions/cache@v4
+      with:
+        path: .build
+        key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-spm-
+    
+    - name: Build PopZeit with verbose output
+      run: |
+        echo "Starting build process..."
+        
+        # Clean previous builds
+        rm -rf .build build
+        mkdir -p build
+        
+        # Build with verbose output and timeout
+        echo "Building with Swift Package Manager..."
+        timeout 600 swift build -c release -v || {
+          echo "Build timed out or failed!"
+          echo "Checking for common issues..."
+          ls -la
+          echo "Swift version:"
+          swift --version
+          echo "Available Xcode versions:"
+          ls /Applications/ | grep -i xcode || echo "No Xcode found"
+          exit 1
+        }
+        
+        # Check if build was successful
+        EXECUTABLE_PATH=".build/release/PopZeit"
+        if [ ! -f "$EXECUTABLE_PATH" ]; then
+            echo "Build failed - executable not found at $EXECUTABLE_PATH"
+            ls -la .build/release/ || echo "Release directory not found"
+            exit 1
+        fi
+        
+        echo "Build successful! Creating app bundle..."
+        
+        # Create app bundle structure
+        APP_BUNDLE="build/PopZeit.app"
+        mkdir -p "$APP_BUNDLE/Contents/MacOS"
+        mkdir -p "$APP_BUNDLE/Contents/Resources"
+        
+        # Copy executable to bundle
+        cp "$EXECUTABLE_PATH" "$APP_BUNDLE/Contents/MacOS/"
+        chmod +x "$APP_BUNDLE/Contents/MacOS/PopZeit"
+        
+        # Copy Info.plist
+        cp PopZeit/Info.plist "$APP_BUNDLE/Contents/"
+        
+        # Copy entitlements (for reference)
+        cp PopZeit/PopZeit.entitlements "$APP_BUNDLE/Contents/"
+        
+        # Copy app icon and resources
+        echo "Copying app icon and resources..."
+        cp PopZeit/Resources/PopZeit.icns "$APP_BUNDLE/Contents/Resources/"
+        cp PopZeit/Resources/PopZeit.png "$APP_BUNDLE/Contents/Resources/"
+        
+        # Make the app executable
+        chmod -R 755 "$APP_BUNDLE"
+        
+        echo "App bundle created successfully!"
+        
+        # Extract version from Info.plist and create ZIP
+        VERSION=$(plutil -extract CFBundleShortVersionString raw "$APP_BUNDLE/Contents/Info.plist")
+        echo "Detected version: $VERSION"
+        
+        # Create ZIP archive for distribution
+        echo "Creating ZIP archive for distribution..."
+        cd build
+        ZIP_NAME="PopZeit-${VERSION}.zip"
+        zip -r "$ZIP_NAME" PopZeit.app
+        cd ..
+        
+        echo "ZIP archive created: build/$ZIP_NAME"
+        ls -la build/
+      timeout-minutes: 15
         
     - name: Get version from tag
       id: get_version
