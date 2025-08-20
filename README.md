@@ -26,7 +26,39 @@ A lightweight macOS menu bar app that instantly converts Unix timestamps to huma
 1. Download the latest release from the [Releases](https://github.com/rahulj51/popzeit/releases) page
 2. Open the `.dmg` file
 3. Drag PopZeit to your Applications folder
+
+### Option 1: Homebrew (Recommended)
+```bash
+# Install via Homebrew Cask
+brew install --cask popzeit
+
+# Update when new versions are available
+brew upgrade --cask popzeit
+
+# Uninstall if needed
+brew uninstall --cask popzeit
+```
+
+### Option 2: Install Script
+```bash
+# One-line installer (downloads latest release automatically)
+curl -fsSL https://raw.githubusercontent.com/rahulj51/popzeit/main/install.sh | bash
+```
+
+### Option 3: Manual Download
+1. Download the latest `PopZeit-X.X.X.zip` from the [Releases](https://github.com/rahulj51/popzeit/releases) page
+2. Extract the ZIP file
+3. Move `PopZeit.app` to your Applications folder
+>>>>>>> brew
 4. Launch PopZeit from Applications
+
+### Option 4: Build from Source
+```bash
+git clone https://github.com/rahulj51/popzeit
+cd popzeit
+./build.sh
+open build/PopZeit.app
+```
 
 ### First Launch
 1. PopZeit will appear in your menu bar (look for the clock icon)
@@ -90,32 +122,40 @@ PopZeit monitors your clipboard for changes. When you copy text that looks like 
 ## Building from Source
 
 ### Prerequisites
-- Xcode 15.0 or later
-- Swift 5.9 or later
+- macOS 13.0 or later
+- Swift 5.9 or later (included with Xcode Command Line Tools)
 
-### Build Steps
+### Quick Build
 ```bash
 # Clone the repository
 git clone https://github.com/rahulj51/popzeit.git
 cd popzeit
 
-# Build with Swift Package Manager
-swift build -c release
+# Build using our build script
+./build.sh
 
-# Or open in Xcode
-open PopZeit.xcodeproj
+# Run the app
+open build/PopZeit.app
 ```
 
-### Creating a Release Build
+### What the Build Script Does
+The `build.sh` script:
+1. Builds the executable with Swift Package Manager
+2. Creates a proper macOS app bundle
+3. Copies all resources and icons
+4. Creates a ZIP archive for distribution
+5. Calculates SHA256 hash for Homebrew Cask
+
+### Manual Build Steps
 ```bash
-# Build and archive
-xcodebuild -scheme PopZeit -configuration Release archive -archivePath ./build/PopZeit.xcarchive
+# Build with Swift Package Manager only
+swift build -c release
 
-# Export for distribution
-xcodebuild -exportArchive -archivePath ./build/PopZeit.xcarchive -exportPath ./build -exportOptionsPlist ExportOptions.plist
-
-# Sign and notarize (requires Apple Developer account)
-./scripts/notarize.sh
+# Create app bundle structure manually
+mkdir -p build/PopZeit.app/Contents/MacOS
+cp .build/release/PopZeit build/PopZeit.app/Contents/MacOS/
+cp PopZeit/Info.plist build/PopZeit.app/Contents/
+# ... copy resources manually
 ```
 
 ## Troubleshooting

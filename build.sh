@@ -46,8 +46,23 @@ cp PopZeit/Resources/PopZeit.png "$APP_BUNDLE/Contents/Resources/"
 # Make the app executable
 chmod -R 755 "$APP_BUNDLE"
 
+# Extract version from Info.plist
+VERSION=$(plutil -extract CFBundleShortVersionString raw "$APP_BUNDLE/Contents/Info.plist")
+
+# Create ZIP archive for distribution
+echo "Creating ZIP archive for distribution..."
+cd build
+ZIP_NAME="PopZeit-${VERSION}.zip"
+zip -r "$ZIP_NAME" PopZeit.app
+cd ..
+
+# Calculate SHA256 for Homebrew Cask
+SHA256=$(shasum -a 256 "build/$ZIP_NAME" | cut -d' ' -f1)
+
 echo "Build complete!"
 echo "App bundle created at: $APP_BUNDLE"
+echo "ZIP archive created at: build/$ZIP_NAME"
+echo "SHA256: $SHA256"
 echo ""
 echo "To test the app:"
 echo "   ./build/PopZeit.app/Contents/MacOS/PopZeit"
@@ -55,7 +70,7 @@ echo ""
 echo "To run as a proper macOS app:"
 echo "   open $APP_BUNDLE"
 echo ""
-echo "Note: This is an unsigned build. For distribution:"
-echo "   1. Sign with your Developer ID"
-echo "   2. Notarize with Apple"
-echo "   3. Create a DMG for distribution"
+echo "For Homebrew Cask distribution:"
+echo "   Version: $VERSION"
+echo "   Archive: build/$ZIP_NAME"
+echo "   SHA256: $SHA256"
