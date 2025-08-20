@@ -8,7 +8,7 @@ A lightweight macOS menu bar app that instantly converts Unix timestamps to huma
 
 - **Clipboard Monitoring**: Copy any Unix timestamp to clipboard to see instant conversion
 - **Multiple Formats**: Shows UTC, local time, and relative time ("2 days ago")
-- **Multiple Timestamp Formats**: Supports seconds (10 digits), milliseconds (13 digits), and microseconds (16 digits)
+- **Multiple Timestamp Formats**: Supports Unix timestamps (seconds, milliseconds, microseconds), UUIDv1 (time-based UUIDs), and ULIDs
 - **Timezone Support**: Pin your favorite timezones for quick reference
 - **Copy to Clipboard**: One-click copy for any time format
 - **Customizable**: Configure date formats, popover timeout, and more
@@ -68,7 +68,10 @@ open build/PopZeit.app
 ## Usage
 
 ### Basic Usage
-1. Find a Unix timestamp in any app (e.g., `1724054400` or `1724054400000`)
+1. Find a timestamp in any app:
+   - Unix timestamps: `1724054400` (seconds), `1724054400000` (milliseconds), `1724054400000000` (microseconds)
+   - UUIDv1: `d0dc2f40-5eeb-11ef-8f0a-0242ac120002`
+   - ULID: `01HK3D4R0G0000000000000000`
 2. Copy the timestamp (Cmd+C)
 3. A popover appears automatically showing the converted time
 4. Click the copy button to copy any format to clipboard
@@ -167,9 +170,15 @@ cp PopZeit/Info.plist build/PopZeit.app/Contents/
 3. Ensure the copied text is a valid timestamp format
 
 ### Timestamp Not Detected
-- PopZeit supports timestamps with 10, 13, or 16 digits
+PopZeit supports multiple timestamp formats:
+- **Unix timestamps**: 10 digits (seconds), 13 digits (milliseconds), or 16 digits (microseconds)
+- **UUIDv1**: Time-based UUIDs with version 1 (format: `XXXXXXXX-XXXX-1XXX-XXXX-XXXXXXXXXXXX`)
+- **ULID**: 26-character Universally Unique Lexicographically Sortable IDs
+
+If detection fails:
 - Ensure there are no extra characters around the timestamp
-- Try copying just the timestamp number without surrounding text
+- Try copying just the timestamp without surrounding text
+- For UUIDs, make sure it's version 1 (time-based), not version 4 (random)
 
 ### Popover Position Issues
 - PopZeit automatically adjusts for multiple monitors
